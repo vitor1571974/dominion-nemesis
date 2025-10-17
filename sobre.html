@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre -- Dominion-nemesis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#030204;
+      --neon-1:#ff1b1b;
+      --neon-2:#ff6b6b;
+      --accent:#ff3b3b;
+      --card-size:360px;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,27,27,0.06), transparent),
+                  radial-gradient(800px 400px at 90% 90%, rgba(255,107,107,0.03), transparent),
+                  var(--bg);
+      font-family:'Poppins',sans-serif;
+      color:#fff;
+      line-height:1.6;
+    }
+    main {
+      width:min(1100px,94%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:32px;
+    }
+    h1 {
+      margin:0;
+      font-size:clamp(26px,4vw,40px);
+      font-weight:800;
+      text-transform:uppercase;
+      color:var(--neon-1);
+      text-shadow:0 0 12px rgba(255,27,27,0.55),0 0 30px rgba(255,59,59,0.15);
+    }
+    p.lead {
+      margin:8px 0 20px 0;
+      color:#ffb3b3;
+      font-weight:400;
+      text-align:center;
+    }
+    /* círculo */
+    .circle-card {
+      width:var(--card-size);
+      height:var(--card-size);
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      background: radial-gradient(circle at 30% 30%, rgba(255,75,75,0.12), rgba(0,0,0,0.12));
+      box-shadow: 0 8px 30px rgba(255,27,27,0.08), inset 0 0 40px rgba(255,27,27,0.06);
+      border:6px solid rgba(255,27,27,0.18);
+      overflow:hidden;
+    }
+    .circle-card::after {
+      content:'';
+      position:absolute;
+      inset:-6px;
+      border-radius:50%;
+      filter:blur(18px);
+      background:radial-gradient(circle, rgba(255,27,27,0.18), transparent 40%);
+      z-index:0;
+    }
+    .about-edit {
+      width:84%;
+      height:78%;
+      border-radius:999px;
+      padding:24px;
+      z-index:1;
+      outline:none;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+      font-size:15px;
+      color:#ffecec;
+      text-align:center;
+      overflow:auto;
+    }
+    /* seção de regras e curiosidades */
+    section.Regras {
+      width:100%;
+      max-width:900px;
+      background:rgba(255,27,27,0.04);
+      border:1px solid rgba(255,27,27,0.12);
+      border-radius:14px;
+      padding:30px;
+      box-shadow:0 0 25px rgba(255,27,27,0.15);
+    }
+    section.Regras h2 {
+      margin-top:0;
+      color:var(--neon-2);
+      text-shadow:0 0 10px rgba(255,27,27,0.6);
+      font-size:24px;
+      text-align:center;
+    }
+    section.Regras p, section.Regras li {
+      font-size:15px;
+      color:#ffecec;
+    }
+    section.Regras ul {
+      padding-left:20px;
+      margin-top:12px;
+      list-style:none;
+    }
+    section.Regras li {
+      margin-bottom:12px;
+      position:relative;
+      padding-left:25px;
+    }
+    section.Regras li::before {
+      content:'⚡';
+      position:absolute;
+      left:0;
+      color:var(--accent);
+    }
+    /* botão voltar */
+    .btn-back {
+      display:inline-block;
+      margin-top:20px;
+      text-decoration:none;
+      padding:12px 18px;
+      border-radius:10px;
+      font-weight:700;
+      background:linear-gradient(90deg,var(--neon-1),var(--neon-2));
+      color:#fff;
+      box-shadow:0 0 20px rgba(255,27,27,0.2);
+      transition:.2s;
+    }
+    .btn-back:hover { filter:brightness(1.1); }
+    /* barra superior */
+    .topbar {
+      position:fixed;
+      top:15px;
+      left:15px;
+      z-index:999;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a href="index.html" class="btn-back">← Voltar</a>
+  </div>
+
+  <main>
+    <h1>𝐃𝐎𝐌𝐈𝐍𝐈𝐎𝐍-𝐍𝐄𝐌𝐄𝐒𝐈𝐒</h1>
+    <p class="lead">A força que une e impulsiona nossos membros para vitórias ainda maiores.</p>
+
+    <div class="circle-card">
+      <div class="about-edit" contenteditable="true">
+        🔥 <strong>𝐃𝐎𝐌𝐈𝐍𝐈𝐎𝐍-𝐍𝐄𝐌𝐄𝐒𝐈𝐒</strong> 🔥<br><br>
+        Nascemos para unir forças, ideias e talentos em um só espírito.<br>
+        Aqui, cada membro é parte essencial de uma família que luta, conquista e cresce lado a lado.<br><br>
+        ⚔️ Determinação<br>
+        🌐 União<br>
+        🚀 Vitória
+      </div>
+    </div>
+
+    <section class="Regras">
+      <h2>NOSSAS REGRAS & VALORES</h2>
+
+      <p>Sejam todos muito bem-vindos à nossa aliança!<br>
+      <strong>Por favor, leia com atenção:</strong></p>
+
+      <p><strong>DOMINION NEMESIS</strong> não é apenas uma aliança. É uma entidade viva, forjada na escuridão da resistência e moldada pela chama da justiça.<br>
+      Inspirada nos pilares do poder e da retaliação, seu nome carrega duas forças ancestrais e opostas:</p>
+
+      <ul>
+        <li><strong>Dominion</strong> – o domínio supremo, o império, a autoridade inquestionável. Representa ordem, controle e soberania sobre o caos.</li>
+        <li><strong>Nemesis</strong> – a justiça divina, a vingança inevitável. A força que se levanta contra o orgulho, o abuso e o desequilíbrio de poder.</li>
+      </ul>
+
+      <p>Juntas, essas palavras formam um código:</p>
+      <blockquote style="margin-left:20px; font-style:italic; color:#ffb3b3;">
+        “Somos o império que se levanta com ordem, mas caímos como justiça sobre os arrogantes.”
+      </blockquote>
+
+      <p>O que é a DOMINION NEMESIS? Somos uma rede de grupos, uma força organizada, uma estrutura de apoio e combate digital. Atuamos estrategicamente em plataformas como WhatsApp, Telegram, Discord — ou onde for necessário criar presença, influência e proteção coletiva.</p>
+
+      <p>Não buscamos quantidade. Buscamos excelência, lealdade e coesão.</p>
+
+      <p><strong>Missão:</strong></p>
+      <ul>
+        <li>Unir grupos e lideranças com o mesmo ideal: apoio mútuo e crescimento sólido.</li>
+        <li>Formar uma estrutura de defesa, onde cada membro sabe que tem com quem contar.</li>
+        <li>Ser uma força silenciosa, mas impossível de ignorar — estratégica, leal e calculada.</li>
+      </ul>
+
+      <p><strong>Códigos da Aliança:</strong></p>
+      <ul>
+        <li>0. Não perdoamos traição.</li>
+        <li>1. Respeito acima de tudo.</li>
+        <li>2. Lealdade é a base — sem ela, não há futuro.</li>
+        <li>3. A missão da aliança está acima dos egos.</li>
+        <li>4. Quem ataca um, enfrenta todos.</li>
+        <li>5. Não somos muitos. Somos os certos.</li>
+        <li>6. Sempre ativos, pra o que der e vier.</li>
+        <li>7. Principalmente: respeito e união entre donos e ADMs dos grupos, para que a paz reine.</li>
+      </ul>
+
+      <p><strong>Significado profundo do nome:</strong><br>
+      <strong>DOMINION</strong>: Império, soberania, estrutura, comando, unidade.<br>
+      <strong>NEMESIS</strong>: Vingança, equilíbrio, consequência, justiça implacável.</p>
+
+      <p>✍️ Assinado: 𖠋 𝐕𝐓𝐙 𝐌𝐎𝐃𝐒 </> 𖠋</p>
+
+      <a href="index.html" class="btn-back">← Voltar</a>
+    </section>
+  </main>
+</body>
+</html>

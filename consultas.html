@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="https://files.catbox.moe/77gdgs.jpg" type="image/jpeg">
+<title>DOMINION-NEMESIS - PUXADAS</title>
+<style>
+  /* Estilo matrix vermelho + visual "terminal" mais bonito */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, monospace;
+    background:#000;color:#ff4d4d;padding:28px 16px;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  canvas#matrix{position:fixed;inset:0;width:100%;height:100%;z-index:0;background:#000}
+
+  .topbar{position:fixed;left:16px;top:16px;z-index:1000;display:flex;gap:8px;align-items:center}
+  .btn-voltar{
+    display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;
+    color:#ff4d4d;background:rgba(0,0,0,0.6);border:1px solid rgba(255,77,77,0.15);
+    box-shadow:0 6px 18px rgba(255,0,0,0.03);
+    font-weight:600
+  }
+
+  .wrap{
+    position:relative;z-index:1;max-width:420px;margin:60px auto 30px;
+    display:flex;flex-direction:column;gap:12px;
+  }
+
+  h1{font-size:1.6rem;text-align:center;color:#fff;margin-bottom:2px;text-shadow:0 0 12px rgba(255,77,77,0.18)}
+  .subtitle{font-size:0.85rem;color:rgba(255,255,255,0.85);text-align:center;margin-bottom:8px}
+
+  select,input,button{
+    width:100%;max-width:100%;padding:12px;border-radius:8px;background:rgba(0,0,0,0.6);
+    border:1px solid rgba(255,77,77,0.14);color:#ff8b8b;font-weight:600;font-size:0.95rem
+  }
+
+  .controls{display:flex;gap:8px;flex-direction:column}
+  .controls-row{display:flex;gap:8px}
+  .controls-row > *{flex:1}
+
+  .btn-inline{
+    display:inline-block;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,77,77,0.16);
+    background:linear-gradient(180deg, rgba(255,0,0,0.02), rgba(0,0,0,0.45));
+    color:#ffdddd;cursor:pointer;font-weight:700
+  }
+
+  #containerResultado, #containerUsuario{
+    background: linear-gradient(180deg, rgba(255,0,0,0.02), rgba(0,0,0,0.6));
+    border-radius:10px;padding:12px;border:1px solid rgba(255,77,77,0.08);
+    box-shadow: 0 8px 40px rgba(255,0,0,0.02);
+    color:#ffdede;max-height:380px;overflow:auto;
+  }
+
+  .resultado-header{
+    display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;
+  }
+
+  .label-chip{
+    background:rgba(255,77,77,0.12);padding:6px 10px;border-radius:999px;font-size:0.85rem;
+    color:#fff;border:1px solid rgba(255,77,77,0.06)
+  }
+
+  pre{
+    white-space:pre-wrap;font-family:monospace;font-size:0.92rem;line-height:1.35;color:#ffdede;
+    margin:8px 0 0;
+  }
+
+  .sep {height:1px;background:linear-gradient(90deg,transparent,#ff4d4d55,transparent);margin:8px 0;border-radius:2px}
+
+  .small{font-size:0.78rem;color:rgba(255,255,255,0.65);text-align:center;margin-top:6px}
+
+  /* responsivo */
+  @media (max-width:420px){
+    .wrap{margin-top:72px;padding-bottom:24px}
+    h1{font-size:1.3rem}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="topbar">
+  <a href="index.html" class="btn-voltar">← VOLTAR</a>
+</div>
+
+<div class="wrap">
+  <h1>🇧🇷 DOMINION-NEMESIS -- PUXADAS</h1>
+  <div class="subtitle">Created by 𖠋 𝐕𝐓𝐙 𝐌𝐎𝐃𝐒 𖠋 </div>
+
+  <div class="controls">
+    <select id="tipo" aria-label="Tipo de consulta">
+      <option value="telefone">📱 Telefone</option>
+      <option value="cpf">📑 CPF</option>
+      <option value="nome">👤 Nome</option>
+      <option value="placa">🚗 Placa</option>
+    </select>
+
+    <input id="entrada" placeholder="Digite o que quer consultar (ex: 11999999999 ou 12345678909)" />
+
+    <div class="controls-row">
+      <button class="btn-inline" onclick="consultar()">CONSULTAR</button>
+      <button class="btn-inline" id="limparBtn" onclick="limpar()">LIMPAR</button>
+    </div>
+  </div>
+
+  <div id="containerResultado" aria-live="polite">
+    <div class="resultado-header">
+      <div class="label-chip">📡 RESULTADO</div>
+      <div style="display:flex;gap:6px">
+        <button id="copyBtn" class="btn-inline" style="display:none" onclick="copiarResultado()">📋 COPIAR</button>
+        <button id="rawBtn" class="btn-inline" style="display:none" onclick="toggleJson()">🔍 JSON BRUTO</button>
+      </div>
+    </div>
+    <div id="metaInfo" class="small">Aguardando consulta...</div>
+    <div class="sep"></div>
+    <pre id="resultado">Nenhuma consulta realizada.</pre>
+  </div>
+
+  <div id="containerUsuario" style="margin-top:10px">
+    <div class="label-chip">👤 INFORMAÇÕES DO DISPOSITIVO</div>
+    <div class="sep"></div>
+    <pre id="usuarioInfo">Carregando...</pre>
+  </div>
+
+  <div class="small">© Direitos reservados a 𝐃𝐎𝐌𝐈𝐍𝐈𝐎𝐍-𝐍𝐄𝐌𝐄𝐒𝐈𝐒</div>
+</div>
+
+<script>
+/* Matrix reduzido */
+const canvas = document.getElementById('matrix');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){canvas.width = innerWidth; canvas.height = innerHeight;}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+const letters = "01";
+const fontSize = 14;
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(1);
+
+function draw(){
+  ctx.fillStyle = "rgba(0,0,0,0.06)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle = "#ff4d4d";
+  ctx.font = fontSize + "px monospace";
+  for(let i=0;i<drops.length;i++){
+    const text = letters.charAt(Math.floor(Math.random()*letters.length));
+    ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+    if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+    drops[i]++;
+  }
+}
+setInterval(() => {
+  columns = Math.floor(canvas.width / fontSize);
+  if (drops.length !== columns) drops = Array(columns).fill(1);
+  draw();
+}, 40);
+
+/* Utils */
+function safeJSON(obj){ try { return JSON.stringify(obj, null, 2); } catch(e){ return String(obj); } }
+function isObject(v){ return v && typeof v === 'object' && !Array.isArray(v); }
+
+function prettifyKey(key){
+  return key.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function formatar(obj, nivel = 0){
+  const pad = ' '.repeat(nivel * 2);
+  if (Array.isArray(obj)){
+    if(obj.length === 0) return pad + '[]\n';
+    return obj.map((x,i) => `${pad}[${i}] ` + (isObject(x) || Array.isArray(x) ? '\n' + formatar(x, nivel+1) : String(x))).join('\n') + '\n';
+  } else if (isObject(obj)){
+    const keys = Object.keys(obj);
+    if(keys.length === 0) return pad + '{}\n';
+    return keys.map(k => {
+      const v = obj[k];
+      const label = prettifyKey(k) + ':';
+      if (isObject(v) || Array.isArray(v)) return `${pad}${label}\n${formatar(v, nivel+1)}`;
+      return `${pad}${label} ${v}`;
+    }).join('\n') + '\n';
+  } else {
+    return pad + String(obj) + '\n';
+  }
+}
+
+function encontrarTelefone(obj){
+  const possiveis = ['tel','telefone','numero','numero_telefone','phone','celular','cell','ddd_telefone'];
+  if (!obj) return null;
+  if (typeof obj === 'string' || typeof obj === 'number'){
+    const s = String(obj).replace(/\s+/g,'');
+    const digits = s.replace(/\D/g,'');
+    if (digits.length >= 8) return s;
+    return null;
+  }
+  if (Array.isArray(obj)){
+    for (const it of obj){
+      const r = encontrarTelefone(it);
+      if (r) return r;
+    }
+  } else if (isObject(obj)){
+    for (const k of Object.keys(obj)){
+      if (possiveis.includes(k.toLowerCase())){
+        const val = obj[k];
+        if (val) return String(val);
+      }
+    }
+    for (const k of Object.keys(obj)){
+      const r = encontrarTelefone(obj[k]);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+
+/* Lógica principal */
+let ultimoJson = null;
+let mostrandoJsonBruto = false;
+
+function toggleJson(){
+  mostrandoJsonBruto = !mostrandoJsonBruto;
+  const resEl = document.getElementById('resultado');
+  const meta = document.getElementById('metaInfo');
+  if (mostrandoJsonBruto){
+    resEl.textContent = safeJSON(ultimoJson || {});
+    meta.textContent = '🔎 JSON BRUTO (apenas dados retornados)';
+  } else {
+    mostrarFormatado(ultimoJson);
+  }
+}
+
+function mostrarFormatado(json){
+  const resEl = document.getElementById('resultado');
+  const meta = document.getElementById('metaInfo');
+  if (!json){
+    resEl.textContent = 'Nenhum resultado para exibir.';
+    meta.textContent = '—';
+    return;
+  }
+
+  let payload = json.resultado || json;
+
+  // remover [0] para consulta de NOME
+  const tipo = document.getElementById('tipo').value.toLowerCase();
+  if (tipo === 'nome' && Array.isArray(payload) && payload.length > 0){
+    payload = payload[0];
+  }
+
+  const ts = new Date().toLocaleString();
+  let out = `📡 RESULTADO (${tipo.toUpperCase()}) — ${ts}\n`;
+  out += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n';
+  out += formatar(payload);
+  out += '\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+
+  const tel = encontrarTelefone(payload);
+  if (tel) out += `📞 TELEFONE DETECTADO: ${tel}\n`;
+  else out += `⚠️ Nenhum telefone detectado automaticamente.\n`;
+
+  resEl.textContent = out;
+  meta.textContent = `Última atualização: ${ts}`;
+}
+
+function copiarResultado(){
+  const txt = document.getElementById('resultado').textContent;
+  navigator.clipboard.writeText(txt).then(()=> {
+    alert('✅ Resultado copiado para a área de transferência.');
+  }).catch(()=> {
+    alert('❌ Não foi possível copiar.');
+  });
+}
+
+function limpar(){
+  document.getElementById('entrada').value = '';
+  document.getElementById('resultado').textContent = 'Nenhuma consulta realizada.';
+  document.getElementById('metaInfo').textContent = 'Aguardando consulta...';
+  document.getElementById('copyBtn').style.display = 'none';
+  document.getElementById('rawBtn').style.display = 'none';
+  ultimoJson = null;
+  mostrandoJsonBruto = false;
+}
+
+async function carregarInfoUsuario(){
+  const el = document.getElementById('usuarioInfo');
+  let ip = 'Desconhecido';
+  try {
+    const r = await fetch('https://api.ipify.org?format=json');
+    const d = await r.json();
+    ip = d.ip || ip;
+  } catch(e){}
+
+  const ua = navigator.userAgent || '';
+  const device = /Android/i.test(ua) ? '📱 Android' : /iPhone|iPad|iPod/i.test(ua) ? '📱 iOS' : '💻 Desktop';
+  const browser = (/(Chrome|Firefox|Safari|Edg|Opera)/i.exec(ua) || [''])[0] || 'Navegador desconhecido';
+  el.textContent = `👤 USER INFO:\n🌐 IP: ${ip}\n🖥️ Dispositivo: ${device}\n🌐 Navegador: ${browser}`;
+}
+carregarInfoUsuario();
+
+async function consultar(){
+  const tipoSel = document.getElementById('tipo').value;
+  const entradaRaw = document.getElementById('entrada').value.trim();
+  const resultadoEl = document.getElementById('resultado');
+  const copyBtn = document.getElementById('copyBtn');
+  const rawBtn = document.getElementById('rawBtn');
+  const meta = document.getElementById('metaInfo');
+
+  resultadoEl.textContent = '';
+  copyBtn.style.display = 'none';
+  rawBtn.style.display = 'none';
+  mostrandoJsonBruto = false;
+
+  if (!entradaRaw){
+    resultadoEl.textContent = '❌ [ERRO] Campo vazio!';
+    meta.textContent = 'Preencha o campo e tente novamente.';
+    return;
+  }
+
+  resultadoEl.textContent = '⏳ Processando consulta...';
+  meta.textContent = 'Aguarde...';
+
+  const key = 'SANDRO_PX2025';
+  const base = 'http://br1.bronxyshost.com:4170/vip/consultas';
+  const tentativaUrls = [];
+
+  if (tipoSel === 'cpf'){
+    tentativaUrls.push(`${base}/cpf?apitoken=${key}&query=${encodeURIComponent(entradaRaw)}`);
+  } else if (tipoSel === 'telefone'){
+    tentativaUrls.push(`${base}/tel?apitoken=${key}&query=${encodeURIComponent(entradaRaw)}`);
+    tentativaUrls.push(`${base}/telefone?apitoken=${key}&query=${encodeURIComponent(entradaRaw)}`);
+    tentativaUrls.push(`${base}/phone?apitoken=${key}&query=${encodeURIComponent(entradaRaw)}`);
+  } else if (tipoSel === 'nome'){
+    tentativaUrls.push(`${base}/nome?apitoken=${key}&query=${encodeURIComponent(entradaRaw)}`);
+  } else if (tipoSel === 'placa'){
+    tentativaUrls.push(`${base}/placa?apitoken=${key}&query=${encodeURIComponent(entradaRaw)}`);
+  }
+
+  let lastError = null;
+  let responseData = null;
+
+  for (const url of tentativaUrls){
+    try {
+      const res = await fetch(url, { method: 'GET' });
+      if (!res.ok) {
+        lastError = `HTTP ${res.status} ${res.statusText}`;
+        continue;
+      }
+      const j = await res.json();
+      responseData = j;
+      break;
+    } catch (err){
+      lastError = err.message;
+      continue;
+    }
+  }
+
+  if (!responseData){
+    resultadoEl.textContent = `❌ Não foi possível consultar: ${lastError || 'erro desconhecido'}\n\nDica: teste a URL no Postman/curl. Se for problema de CORS, execute via servidor/back-end.`;
+    meta.textContent = 'Falha na consulta';
+    return;
+  }
+
+  ultimoJson = responseData;
+  mostrarFormatado(ultimoJson);
+
+  copyBtn.style.display = 'inline-block';
+  rawBtn.style.display = 'inline-block';
+}
+
+window.consultar = consultar;
+window.limpar = limpar;
+window.copiarResultado = copiarResultado;
+window.toggleJson = toggleJson;
+</script>
+
+</body>
+</html>

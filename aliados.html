@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRUPOS-ALIADOS</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
+    body {
+        background: linear-gradient(180deg, #000000, #1a0000);
+        color: white;
+        min-height: 100vh;
+        overflow-y: auto;
+        text-align: center;
+        padding-bottom: 30px;
+    }
+    header {
+        padding: 25px 10px;
+        font-size: 26px;
+        font-weight: bold;
+        color: #ff0000;
+        text-shadow: 0 0 12px red;
+    }
+    .topbar {
+        padding: 10px 0;
+        text-align: left;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto 20px auto;
+    }
+    .btn-voltar {
+        display: inline-block;
+        padding: 8px 15px;
+        background: #ff0000;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s, box-shadow 0.3s;
+    }
+    .btn-voltar:hover {
+        background: #ff4444;
+        box-shadow: 0 0 10px red;
+    }
+    .container {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+    .grupo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 95%;
+        max-width: 700px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid #ff0000;
+        border-radius: 15px;
+        padding: 15px 20px;
+        box-shadow: 0 0 12px rgba(255, 0, 0, 0.4);
+        transition: all 0.3s ease;
+    }
+    .grupo:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+    }
+    .info {
+        text-align: left;
+        flex: 1;
+        margin-left: 20px;
+    }
+    .info h3 {
+        color: #ff4444;
+        margin-bottom: 8px;
+        font-size: 1.3em;
+    }
+    .btn {
+        display: inline-block;
+        padding: 8px 15px;
+        background: #ff0000;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s, box-shadow 0.3s;
+    }
+    .btn:hover {
+        background: #ff4444;
+        box-shadow: 0 0 10px red;
+    }
+    .grupo img {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+        border: 2px solid #ff0000;
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.6);
+        transition: transform 0.3s;
+    }
+    .grupo img:hover {
+        transform: scale(1.1);
+    }
+    footer {
+        margin-top: 40px;
+        font-size: 14px;
+        color: #aaa;
+    }
+    @media (max-width: 600px) {
+        .grupo {
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 10px;
+        }
+        .info h3 {
+            font-size: 1.1em;
+        }
+        .grupo img {
+            width: 60px;
+            height: 60px;
+            margin-right: 10px;
+        }
+    }
+    #perfil-carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-bottom: 25px;
+  height: 150px;
+}
+
+.perfil-card {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #00ffff88;
+  border-radius: 16px;
+  text-align: center;
+  padding: 15px;
+  width: 180px;
+  box-shadow: 0 0 15px #00ffff33;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.6s ease;
+}
+
+.perfil-card.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.img-wrapper-mini {
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 10px;
+  border-radius: 50%;
+  background: linear-gradient(270deg, #ff6ec4, #7873f5, #4facfe, #43e97b, #f9f871);
+  background-size: 1000% 1000%;
+  animation: gradientMove 10s ease infinite;
+  padding: 3px;
+  position: relative;
+  overflow: visible;
+}
+
+.img-wrapper-mini img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.name-mini {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+
+.desc-mini {
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+.devs-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 25px;
+  background: linear-gradient(90deg, #00ffff, #43e97b, #ff6ec4, #4facfe);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientMove 6s ease infinite, pulseText 3s infinite alternate;
+}
+
+.verified-badge {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  position: relative;
+  top: -2px;
+  filter: drop-shadow(0 0 6px #00ffffaa);
+  animation: pulseVerified 2s infinite ease-in-out;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulseText {
+  0% { text-shadow: 0 0 6px #00ffffaa; }
+  100% { text-shadow: 0 0 18px #00ffff; }
+}
+
+@keyframes pulseVerified {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 4px #00ffff);
+  }
+  50% {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 8px #00ffffaa);
+  }
+}
+</style>
+</head>
+<body>
+
+<header>GRUPOS-ALIADOS</header>
+
+<div class="topbar">
+  <a href="javascript:history.back()" class="btn-voltar">VOLTA</a>
+</div>
+
+<!-- CARROSSEL DE DESENVOLVEDORES -->
+<div id="perfil-carousel">
+<div class="perfil-card active">
+    <div class="img-wrapper-mini">
+      <img src="https://qu.ax/SlfDA.jpg" alt="VTZ MODS">
+    </div>
+    <div class="name-mini">
+      VTZ MODS | DN
+      <img src="https://neon-apis.shop/44a7ac29.png" class="verified-badge" alt="verificado">
+    </div>
+    <div class="desc-mini">FOUNDER</div>
+  </div>
+  
+  <div class="perfil-card">
+    <div class="img-wrapper-mini">
+      <img src="https://files.catbox.moe/4m3bir.jpg" alt="Daniel Dev </> | DN">
+    </div>
+    <div class="name-mini">
+      Daniel Dev </> | DN
+      <img src="https://neon-apis.shop/44a7ac29.png" class="verified-badge" alt="verificado">
+    </div>
+    <div class="desc-mini">ADM PRINCIPAL</div>
+  </div>
+</div>
+
+<h4 class="devs-title">FOUNDER & ADM PRINCIPAL</h4>
+
+<div class="container" id="grupos"></div>
+
+<!-- Footer -->
+<footer class="footer">
+     2025 DOMINION-NEMESIS - Tods os direitos reservados.
+</footer>
+<footer>Created by  VTZ MODS </footer>
+
+<script>
+const grupos = [
+    {
+        nome: "Canal da alianca",
+        link: "https://whatsapp.com/channel/0029VbAmrA5JkK7C0qePoT3D",
+        imagem: "https://qu.ax/QkiRJ.jpg"
+    },
+    {
+        nome: "Chat - DA NEMESIS",
+        link: "https://chat.whatsapp.com/LF8KogkqA9oAJvg38MetEM?mode=wwc",
+        imagem: "https://qu.ax/QkiRJ.jpg"
+    },
+    {
+        nome: "BotCrafters | O retorno",
+        link: "",
+        imagem: "https://qu.ax/QkiRJ.jpg"
+    },
+    {
+        nome: "Dominion Stickers",
+        link: "https://chat.whatsapp.com/GSCgzbezEoYHrA1rkVr5ad?mode=wwt",
+        imagem: "https://qu.ax/iwbBx.jpg"
+    },
+    {
+        nome: "Uniao Sotaku Word Press 6/6",
+        link: "https://chat.whatsapp.com/G1zKabf5X8WFYPAfpFqSBA?mode=wwc",
+        imagem: "https://qu.ax/OYnbZ.jpg"
+    },
+    {
+        nome: "Motel da Tet¨º",
+        link: "https://chat.whatsapp.com/ExfTAWGAxwgItLUbVg76P3?mode=wwt",
+        imagem: "https://qu.ax/vbkWN.jpg"
+    }
+];
+
+const container = document.getElementById("grupos");
+
+grupos.forEach(g => {
+    const div = document.createElement("div");
+    div.className = "grupo";
+    div.innerHTML = `
+        <img src="${g.imagem}" alt="Imagem do grupo">
+        <div class="info">
+            <h3>${g.nome}</h3>
+            <a href="${g.link}" target="_blank" class="btn">Entrar</a>
+        </div>
+    `;
+    container.appendChild(div);
+});
+  // Script simples pra trocar automaticamente os cards
+  const cards = document.querySelectorAll('.perfil-card');
+  let current = 0;
+
+  setInterval(() => {
+    cards[current].classList.remove('active');
+    current = (current + 1) % cards.length;
+    cards[current].classList.add('active');
+  }, 6000); // muda a cada 4 segundos
+</script>
+
+</body>
+</html>
